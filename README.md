@@ -68,6 +68,9 @@ The app will be available at `http://localhost:3000`.
 1. **Ask a Question**: Type your agricultural query in the input field (e.g., "What crops grow well in sandy soil?").
 2. **Use Quick Actions**: Click on any of the predefined buttons like "Crop Suggestions" or "Pest Control" to get started quickly.
 3. **Clear Chat**: Use the trash icon in the header to reset the conversation.
+<img width="1919" height="866" alt="image" src="https://github.com/user-attachments/assets/1d0b73c5-f768-4da7-9ea5-cc77ff29e1cb" />
+<img width="625" height="856" alt="image" src="https://github.com/user-attachments/assets/b021852d-9456-4470-9cc1-39e873cd0ab9" />
+
 
 ## Security Note
 
