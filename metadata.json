@@ -1,5 +1,5 @@
 {
   "name": "AgriBot: AI Agriculture Assistant",
   "description": "A smart AI chatbot designed to help farmers with crop suggestions, weather advice, fertilizers, and pest control using Google Gemini.",
-  "requestFramePermissions": []
+  "requestFramePermissions": ["geolocation"]
 }

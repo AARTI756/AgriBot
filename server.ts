@@ -16,14 +16,14 @@ async function startServer() {
   const PORT = 3000;
 
   app.use(cors());
-  app.use(express.json());
+  app.use(express.json({ limit: "10mb" })); // Increased limit for image uploads
 
   // Gemini API Initialization
   const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
   // API Routes
   app.post("/api/chat", async (req, res) => {
-    const { message, history } = req.body;
+    const { message, history, image, weather, crop } = req.body;
 
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ error: "Gemini API key is not configured." });
@@ -36,16 +36,33 @@ async function startServer() {
       try {
         const model = "gemini-3.1-flash-lite-preview";
         
-        const systemInstruction = `You are an Agriculture Assistant Chatbot. 
+        // Enhanced system instruction with weather and crop context if available
+        let systemInstruction = `You are an Agriculture Assistant Chatbot. 
         Your goal is to help farmers with:
         - Crop suggestions based on soil and climate.
         - Weather-based advice for farming activities.
         - Fertilizer recommendations.
-        - Pest and disease control strategies.
+        - Pest and disease control strategies.`;
+
+        if (crop) {
+          systemInstruction += `\n\nUSER'S CURRENT CROP CONTEXT: The user is currently focused on ${crop}. Tailor your advice specifically for this crop unless they ask about something else.`;
+        }
         
-        Keep your responses helpful, practical, and easy to understand for farmers. 
+        systemInstruction += `\n\nKeep your responses helpful, practical, and easy to understand for farmers. 
         Use bullet points for lists and keep advice concise. 
-        If you don't know something specific about a local region, suggest consulting a local agricultural officer.`;
+        If you don't know something specific about a local region, suggest consulting a local agricultural officer.
+        
+        IMPORTANT: Always include a brief disclaimer at the end of important advice: "Disclaimer: AgriBot provides suggestions based on AI analysis. Please consult local agricultural experts for critical decisions."`;
+
+        if (weather) {
+          systemInstruction += `\n\nCURRENT WEATHER CONTEXT:
+          Location: ${weather.location}
+          Temperature: ${weather.temp}°C
+          Condition: ${weather.condition}
+          Humidity: ${weather.humidity}%
+          Wind Speed: ${weather.windSpeed} m/s
+          Please use this weather data to provide more relevant and timely farming advice.`;
+        }
 
         const chat = genAI.chats.create({
           model: model,
@@ -57,7 +74,23 @@ async function startServer() {
           history: history || [],
         });
 
-        const result = await chat.sendMessage({ message });
+        // Handle multimodal input (image + text)
+        // The message parameter can be a string or an array of parts
+        let messagePayload: any = message;
+        
+        if (image) {
+          messagePayload = [
+            { text: message || "Please analyze this crop image for any diseases or pests." },
+            {
+              inlineData: {
+                data: image.split(",")[1], // Remove base64 prefix
+                mimeType: "image/jpeg", 
+              },
+            },
+          ];
+        }
+
+        const result = await chat.sendMessage({ message: messagePayload });
         return res.json({ response: result.text });
 
       } catch (error: any) {
