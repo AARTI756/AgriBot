@@ -81,6 +81,7 @@ The application will be accessible at `http://localhost:3000`.
 5. **Weather Advice**: Check the weather widget in the header; AgriBot uses this data to refine its suggestions.
 6. **Quick Actions**: Use smart suggestion buttons for faster queries.
 7. **Clear Chat**: Use the trash icon to delete a conversation if needed.
+
 ## 🛡️ Security & Privacy
 
 - **API Security**: Your Gemini API key is stored on the server side and is never exposed to the browser.
