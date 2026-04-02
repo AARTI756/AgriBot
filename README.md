@@ -82,6 +82,10 @@ The application will be accessible at `http://localhost:3000`.
 6. **Quick Actions**: Use smart suggestion buttons for faster queries.
 7. **Clear Chat**: Use the trash icon to delete a conversation if needed.
 
+<img width="1919" height="875" alt="image" src="https://github.com/user-attachments/assets/3ef865d4-b816-413d-bee2-ac0aa4424663" />
+<img width="1913" height="856" alt="image" src="https://github.com/user-attachments/assets/b8200e55-4fc1-4874-b0ca-8b84e3ff5094" />
+
+
 ## 🛡️ Security & Privacy
 
 - **API Security**: Your Gemini API key is stored on the server side and is never exposed to the browser.
